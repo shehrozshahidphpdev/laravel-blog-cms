@@ -1,44 +1,56 @@
 <aside class="w-56 bg-white border-r border-gray-200 flex flex-col shrink-0 min-h-screen">
 
-    {{-- Brand --}}
-    <div class="px-4 py-4 border-b border-gray-200 flex items-center gap-2.5">
-        <div class="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center shrink-0">
-            {{-- pen/blog icon --}}
-        </div>
-        <span class="text-sm font-medium text-gray-800">Blog Admin</span>
+    <div class="px-4 py-5 border-b border-gray-200">
+        <div class="text-lg font-medium text-gray-800">Blog</div>
+
+        <nav class="flex-1 px-2 py-3 space-y-0.5">
+            <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1">Main</p>
+
+            <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium
+                      {{ request()->is('dashboard') ? 'bg-purple-50 text-purple-800' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800' }}">
+                <i
+                    class=" fa-solid fa-house w-4 text-xs {{ request()->is('student/dashboard') ? 'text-purple-600' : 'text-gray-400' }}"></i>
+                Dashboard
+            </a>
+
+            <a href="/admin/dashboard/students"
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                <i class="fa-solid fa-user w-4 text-gray-400 text-xs"></i>
+                Students
+            </a>
+            @if (Auth::user()->role == 'admin')
+                <a href="{{ route('accounts') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition
+                                                        ">
+                    <i class="fa-solid fa-clock-rotate-left w-4 text-gray-400 text-xs"></i>
+                    Accounts
+                </a>
+            @endif
+
+            <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">Account</p>
+
+            <a href="/student/dashboard/password"
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                <i class="fa-solid fa-lock w-4 text-gray-400 text-xs"></i>
+                Change Password
+            </a>
+            @if(Auth::user()->role === 'admin')
+                <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">CMS</p>
+                <a href="{{ route('categories.index') }}"
+                    class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                    <i class="fa-solid fa-box w-4 text-gray-400 text-xs"></i>
+                    Categories
+                </a>
+            @endif
+        </nav>
     </div>
 
-    {{-- Nav --}}
-    <nav class="flex-1 px-2.5 py-3 space-y-0.5 overflow-y-auto">
-
-        <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider px-2 pb-1">Content</p>
-
-        <a href="/"
-            class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm font-medium
-                   {{ request()->is('admin/dashboard') ? 'bg-purple-50 text-purple-800' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800' }} transition-colors">
-            {{-- grid icon --}}
-            Dashboard
-        </a>
-
-        {{-- ... repeat for Posts, Categories, Comments ... --}}
-
-        <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider px-2 pb-1 pt-3">Users</p>
-
-        {{-- All Users, Add User --}}
-
-        <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wider px-2 pb-1 pt-3">Account</p>
-
-        {{-- Change Password, Profile --}}
-
-    </nav>
-
-    {{-- Logout --}}
-    <div class="px-2.5 py-3 border-t border-gray-200">
-        <form action="/logout" method="POST">
+    <div class="mt-auto px-2 py-3 border-t border-gray-200">
+        <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit"
-                class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm text-red-700 hover:bg-red-50 transition-colors w-full">
-                {{-- logout icon --}}
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50 transition w-full">
+                <i class="fa-solid fa-right-from-bracket text-xs w-4"></i>
                 Logout
             </button>
         </form>
