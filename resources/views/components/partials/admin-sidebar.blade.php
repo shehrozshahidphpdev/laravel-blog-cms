@@ -14,14 +14,10 @@
                 Dashboard
             </a>
 
-            <a href="/admin/dashboard/students"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
-                <i class="fa-solid fa-user w-4 text-gray-400 text-xs"></i>
-                Students
-            </a>
             @if (Auth::user()->role == 'admin')
-                <a href="{{ route('accounts') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition
-                                                        ">
+                <a href="{{ route('accounts') }}"
+                    class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition
+                                                                                                                                    ">
                     <i class="fa-solid fa-clock-rotate-left w-4 text-gray-400 text-xs"></i>
                     Accounts
                 </a>
@@ -41,7 +37,29 @@
                     <i class="fa-solid fa-box w-4 text-gray-400 text-xs"></i>
                     Categories
                 </a>
+
+                {{-- tags --}}
+                <a href="{{ route('tags.index') }}"
+                    class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                    <i class="fa-solid fa-tag w-4 text-gray-400 text-xs"></i>
+                    Tags
+                </a>
             @endif
+
+            @if(Auth::user()->role === 'editor')
+                <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">CMS</p>
+                <a href="{{ route('posts.index') }}"
+                    class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                    <i class="fa-solid fa-box w-4 text-gray-400 text-xs"></i>
+                    Posts
+                </a>
+            @endif
+            {{-- comments --}}
+            <a href="{{ route('comments.index') }}"
+                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
+                <i class="fa-solid fa-pen w-4 text-gray-400 text-xs"></i>
+                Comments
+            </a>
         </nav>
     </div>
 

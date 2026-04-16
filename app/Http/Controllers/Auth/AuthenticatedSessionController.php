@@ -24,11 +24,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // dd($request);
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        if ($user->role == 'admin' || $user->role == 'editor') {
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+
+        return to_route('home');
     }
 
     /**
@@ -36,12 +43,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // dd('here');
+        $user = $request->user();
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        if ($user->role == 'visitor') {
+            return to_route('home');
+        }
+
+        return to_route('login');
     }
 }

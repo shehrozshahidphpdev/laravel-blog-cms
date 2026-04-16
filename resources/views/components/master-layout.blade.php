@@ -21,6 +21,14 @@
       --font-body:    'Source Serif 4', Georgia, serif;
       --font-ui:      'DM Sans', sans-serif;
     }
+    .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
   </style>
 </head>
 
@@ -33,81 +41,62 @@
             <div class="flex items-center justify-between gap-4 py-3 border-b border-stone-200">
 
                 <!-- Brand -->
-                <a href="#"
+                <a href="{{ route('home') }}"
                     class="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-black no-underline whitespace-nowrap">
-                    The <span class="text-red-600">Folio</span>
+                    My <span class="text-red-600">Blog</span>
                 </a>
 
                 <!-- Search -->
                 <div class="flex-1 max-w-md relative">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" width="15"
-                        height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
-                    </svg>
-                    <input type="text" placeholder="Search articles, topics, authors…"
-                        class="w-full border border-stone-200 bg-stone-50 rounded-sm pl-9 pr-4 py-2 font-[family-name:var(--font-ui)] text-sm text-black placeholder:text-stone-400 outline-none focus:border-red-600 transition-colors" />
+                    <form action="{{ route('all-posts') }}" method="get">
+                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" width="15"
+                            height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                        
+                        <input type="text" name="search" placeholder="Search articles…" value="{{ request('search') }}"
+                            class="w-full border border-stone-200 bg-stone-50 rounded-sm pl-9 pr-4 py-2 font-[family-name:var(--font-ui)] text-sm text-black placeholder:text-stone-400 outline-none focus:border-red-600 transition-colors" />
+                    </form>
                 </div>
 
                 <!-- Actions -->
                 <div class="flex items-center gap-2">
-                    <a href="#"
+                    {{-- <a href="#"
                         class="font-[family-name:var(--font-ui)] text-sm font-medium text-black border border-transparent px-4 py-2 rounded-sm hover:border-stone-200 hover:bg-stone-100 transition-all whitespace-nowrap">Sign
-                        In</a>
-                    <a href="#"
-                        class="font-[family-name:var(--font-ui)] text-sm font-medium bg-red-600 text-white px-5 py-2 rounded-sm hover:bg-red-700 transition-colors whitespace-nowrap">Subscribe</a>
+                        In</a> --}}
+                        @auth
+                        <p class="text-md font-bold">Welcome, {{ Auth::user()->name }}</p>
+                        <form action="{{ route('logout') }}" method="post">
+                            @csrf
+                                <button type="submit"
+                                class="cursor-pointer font-[family-name:var(--font-ui)] text-sm font-medium bg-red-600 text-white px-5 py-2 rounded-sm hover:bg-red-700 transition-colors whitespace-nowrap">Logout
+                            </button>
+                        </form>
+                        @endauth
+                        @if (! Auth::check())
+                             <a href="{{ route('login') }}"
+                        class="font-[family-name:var(--font-ui)] text-sm font-medium bg-red-600 text-white px-5 py-2 rounded-sm hover:bg-red-700 transition-colors whitespace-nowrap">Sign In</a>
+                        @endif
+
+                   
                 </div>
             </div>
 
             <!-- Nav links -->
-            <div class="flex items-center overflow-x-auto gap-0">
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-red-600 border-b-2 border-red-600 pr-5 py-3 whitespace-nowrap">Home</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Latest</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Featured</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Authors</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Archive</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Podcast</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">About</a>
-                <a href="#"
-                    class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-stone-500 border-b-2 border-transparent pr-5 py-3 whitespace-nowrap hover:text-red-600 hover:border-red-600 transition-all">Contact</a>
-            </div>
+    
         </div>
     </nav>
 
     <!-- ░░ CATEGORY STRIP ░░ -->
     <div class="bg-black border-b-2 border-red-600">
-        <div class="max-w-7xl mx-auto px-6 flex items-center overflow-x-auto gap-0">
-            <a href="#"
+    <div class="max-w-7xl mx-auto px-6 flex items-center overflow-x-auto gap-0 scrollbar-hide">
+            <a href="{{ route('all-posts') }}"
                 class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-red-500 border-b-2 border-red-500 pr-4 py-3 whitespace-nowrap">All</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Technology</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Science</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Culture</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Politics</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Philosophy</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Health</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Design</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">History</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Finance</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Environment</a>
-            <a href="#"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">Travel</a>
+            @foreach ($categories as $category)
+                <a href="{{ route('all-posts', $category->slug) }}"
+                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">{{ $category->name }}</a>
+            @endforeach
         </div>
     </div>
 
@@ -121,20 +110,11 @@
 
             <!-- Brand col -->
             <div>
-                <p class="font-[family-name:var(--font-display)] text-2xl font-bold mb-3">The <span
-                        class="text-red-500">Folio</span></p>
+                <p class="font-[family-name:var(--font-display)] text-2xl font-bold mb-3">My <span
+                        class="text-red-500">Blog</span></p>
                 <p class="font-[family-name:var(--font-body)] text-sm italic text-white/50 leading-relaxed mb-5">
-                    Thoughtful writing for curious minds. Published since 2019.</p>
-                <div class="flex gap-2">
-                    <a href="#"
-                        class="w-9 h-9 border border-white/20 flex items-center justify-center font-[family-name:var(--font-ui)] text-xs font-semibold text-white/60 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all">𝕏</a>
-                    <a href="#"
-                        class="w-9 h-9 border border-white/20 flex items-center justify-center font-[family-name:var(--font-ui)] text-xs font-semibold text-white/60 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all">in</a>
-                    <a href="#"
-                        class="w-9 h-9 border border-white/20 flex items-center justify-center font-[family-name:var(--font-ui)] text-xs font-semibold text-white/60 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all">ig</a>
-                    <a href="#"
-                        class="w-9 h-9 border border-white/20 flex items-center justify-center font-[family-name:var(--font-ui)] text-xs font-semibold text-white/60 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all">yt</a>
-                </div>
+                    Welcome To My blog</p>
+            
             </div>
 
             <!-- Topics -->

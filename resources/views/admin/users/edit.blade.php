@@ -11,11 +11,10 @@
         </svg>
         Back to Accounts
       </a>
-      <h1 class="text-2xl font-semibold text-gray-900">Create new account</h1>
+      <h1 class="text-2xl font-semibold text-gray-900">Edit user account</h1>
       <p class="text-sm text-gray-500 mt-1">Fill in the details below to add a new user account.</p>
     </div>
 
-    {{-- Form Card --}}
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
 
       <form action="{{ route('accounts.update', $user->id) }}" method="POST">
@@ -131,7 +130,7 @@
           </a>
           <button type="submit"
             class="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-gray-700 active:scale-95 transition-all">
-            Create account
+            Save
           </button>
         </div>
       </form>

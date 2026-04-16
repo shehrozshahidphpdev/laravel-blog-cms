@@ -15,6 +15,10 @@ class IsEditor
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (! $request->user()->role == 'editor') {
+            abort(403);
+        }
+
         return $next($request);
     }
 }

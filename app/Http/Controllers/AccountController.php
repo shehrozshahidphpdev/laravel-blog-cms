@@ -10,7 +10,7 @@ class AccountController extends Controller
 {
     public function users()
     {
-        $users = User::all();
+        $users = User::paginate(10);
         return view('admin.users.list', compact('users'));
     }
 
@@ -64,8 +64,14 @@ class AccountController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'role' => 'nullable',
             'status' => 'nullable',
-            'password' => 'nullable|min:8|confirmed'
+            'password' => 'nullable|min:8'
         ]);
+
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'confirmed',
+            ]);
+        }
         $data = [
             'name' => $request->name,
             'email' => $request->email,

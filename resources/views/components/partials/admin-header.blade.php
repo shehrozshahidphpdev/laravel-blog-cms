@@ -1,6 +1,6 @@
 <!-- Header -->
 <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-5 shrink-0">
-    <div class="text-sm font-medium text-gray-800">Welcome Admin</div>
+    <div class="text-sm font-medium text-gray-800">Welcome {{ Auth::user()->name }}</div>
 
     <div class="flex items-center gap-2">
         <!-- Notification Bell -->
@@ -26,7 +26,7 @@
         <!-- Avatar -->
         <div
             class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-xs font-medium text-purple-700 cursor-pointer">
-            SH
+            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
         </div>
 
     </div>

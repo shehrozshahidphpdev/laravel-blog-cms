@@ -2,9 +2,8 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('admin.login') }}">
+    <form method="POST" action="{{ route('login') }}">
         @csrf
-
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
@@ -31,6 +30,11 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
+
+        {{-- not have account --}}
+        <p class="text-center text-sm">
+            Not have an account?<a href="{{ route('register') }}" class="text-blue-500 underline"> register here</a>
+        </p>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
