@@ -20,16 +20,16 @@ Route::get('post/{id}', [HomeController::class, 'readPost'])
     ->name('read-post');
 
 // comments routes
-Route::post('comments', [CommentController::class, 'store'])
-    ->name('comments.store');
-Route::get('comments', [DashBoardController::class, 'comments'])
-    ->name('comments.index');
-Route::put('comments/status/{id}', [CommentController::class, 'update'])
-    ->name('comments.status')
-    ->middleware(['auth']);
-Route::delete('comments/{id}', [CommentController::class, 'destroy'])
-    ->name('comments.destroy')
-    ->middleware(['auth']);
+Route::middleware(['auth'])->group(function () {
+    Route::post('comments', [CommentController::class, 'store'])
+        ->name('comments.store');
+    Route::get('comments', [DashBoardController::class, 'comments'])
+        ->name('comments.index')->withoutMiddleware(['auth']);
+    Route::put('comments/status/{id}', [CommentController::class, 'update'])
+        ->name('comments.status');
+    Route::delete('comments/{id}', [CommentController::class, 'destroy'])
+        ->name('comments.destroy');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

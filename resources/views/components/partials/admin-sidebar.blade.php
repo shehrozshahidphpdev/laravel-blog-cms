@@ -17,7 +17,7 @@
             @if (Auth::user()->role == 'admin')
                 <a href="{{ route('accounts') }}"
                     class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition
-                                                                                                                                    ">
+                                                                                                                                                                    ">
                     <i class="fa-solid fa-clock-rotate-left w-4 text-gray-400 text-xs"></i>
                     Accounts
                 </a>
@@ -25,13 +25,14 @@
 
             <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">Account</p>
 
-            <a href="/student/dashboard/password"
+            <a href="{{ route('profile.edit') }}"
                 class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
                 <i class="fa-solid fa-lock w-4 text-gray-400 text-xs"></i>
-                Change Password
+                Profile
             </a>
+            <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">CMS</p>
+
             @if(Auth::user()->role === 'admin')
-                <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">CMS</p>
                 <a href="{{ route('categories.index') }}"
                     class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
                     <i class="fa-solid fa-box w-4 text-gray-400 text-xs"></i>
@@ -46,8 +47,7 @@
                 </a>
             @endif
 
-            @if(Auth::user()->role === 'editor')
-                <p class="text-xs text-gray-400 uppercase tracking-wide px-2 py-1 pt-3">CMS</p>
+            @if(Auth::user()->role === 'editor' || Auth::user()->role == 'admin')
                 <a href="{{ route('posts.index') }}"
                     class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition">
                     <i class="fa-solid fa-box w-4 text-gray-400 text-xs"></i>

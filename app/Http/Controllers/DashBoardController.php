@@ -11,12 +11,11 @@ class DashBoardController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('author_name', Auth::user()->id)
+        $posts = Post::where('author_id', Auth::user()->id)
             ->paginate(10);
         $comments = Comment::whereHas('post', function ($q) {
-            $q->where('author_name', Auth::user()->id);
-        })->count();
-        // dd($comments);
+            $q->where('author_id', Auth::user()->id);
+        })->get();
         return view('admin.index', compact('posts', 'comments'));
     }
 
@@ -24,7 +23,7 @@ class DashBoardController extends Controller
     {
         $userId = Auth::user()->id;
         $comments = Comment::with('user')->whereHas('post', function ($q) {
-            $q->where('author_name', Auth::user()->id);
+            $q->where('author_id', Auth::user()->id);
         })->paginate(15);
 
         if (Auth::user()->role == 'admin') {

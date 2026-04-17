@@ -17,12 +17,14 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $posts = Post::with(['tags', 'category', 'user'])
-            ->where('author_name', Auth::user()->id)
+            ->where('author_id', Auth::user()->id)
             ->paginate(10);
-        // return $posts;
+        if ($request->user()->role == 'admin') {
+            $posts = Post::orderByDesc('id')->paginate(10);
+        }
         return view('admin.posts.list', compact('posts'));
     }
 
@@ -69,7 +71,7 @@ class PostController extends Controller
                 'title' => $request->title,
                 'content' => $request->content,
                 'image' => $fileName,
-                'author_name' => Auth::user()->id,
+                'author_id' => Auth::user()->id,
                 'slug' => Str::slug($request->title)
             ];
             if ($request->filled('status')) {
@@ -146,7 +148,7 @@ class PostController extends Controller
                 'title' => $request->title,
                 'content' => $request->content,
                 'image' => $fileName,
-                'author_name' => Auth::user()->id,
+                'author_id' => Auth::user()->id,
                 'slug' => Str::slug($request->title)
             ];
             if ($request->filled('status')) {
@@ -172,10 +174,18 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
+        $user = Auth::user();
+        if (! in_array($user->role, ['admin', 'editor'])) {
+            abort(403, "You dont have the permissions to delet the post");
+        }
+        if ($user->role === 'editor' && $post->author_id !== $user->id) {
+            abort(403, "You dont have the permissions to delet the post");
+        }
         $filePath = $post->image;
         MyHelper::removeFile($filePath);
         $post->tags()->sync([]);
         $post->delete();
-        return to_route('posts.index')->with('success', "Post Deleted Successfully!");
+
+        return redirect()->back()->with('success', "Post Deleted Successfully");
     }
 }

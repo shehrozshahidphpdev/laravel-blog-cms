@@ -5,12 +5,7 @@
     <div class="flex items-center gap-2">
         <!-- Notification Bell -->
         <div class="relative" id="notif-wrap">
-            <button onclick="toggle('notif-dd')"
-                class="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition text-sm relative">
-                <i class="fa-solid fa-bell"></i>
-                <span
-                    class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-purple-600 border border-white"></span>
-            </button>
+
             <div id="notif-dd"
                 class="hidden absolute right-0 top-10 w-52 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
                 <!-- ✅ only this keeps notif-dd -->

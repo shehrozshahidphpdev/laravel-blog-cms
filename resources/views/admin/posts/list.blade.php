@@ -21,7 +21,7 @@
     </div>
 
     <!-- Table Card -->
-    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+    <div class="bg-white border border-gray-200 rounded-xl  shadow-sm overflow-auto">
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-gray-200 bg-gray-50">

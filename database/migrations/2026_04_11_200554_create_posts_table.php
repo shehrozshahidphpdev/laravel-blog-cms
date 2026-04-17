@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('categories')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreignId('author_name')
+            $table->foreignId('author_id')
                 ->constrained('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
