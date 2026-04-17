@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', [DashBoardController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
+    ->middleware(['auth', 'verified', 'IsAdminOrEditor'])->name('dashboard');
 
 Route::get('posts/{category?}', [HomeController::class, 'posts'])
     ->name('all-posts');
@@ -23,12 +23,19 @@ Route::get('post/{id}', [HomeController::class, 'readPost'])
 Route::middleware(['auth'])->group(function () {
     Route::post('comments', [CommentController::class, 'store'])
         ->name('comments.store');
-    Route::get('comments', [DashBoardController::class, 'comments'])
-        ->name('comments.index')->withoutMiddleware(['auth']);
-    Route::put('comments/status/{id}', [CommentController::class, 'update'])
-        ->name('comments.status');
+    // admin comment routes
+
     Route::delete('comments/{id}', [CommentController::class, 'destroy'])
         ->name('comments.destroy');
+
+    Route::middleware(['IsAdminOrEditor'])->group(function () {
+
+        Route::get('comments', [DashBoardController::class, 'comments'])
+            ->name('comments.index')->withoutMiddleware(['auth']);
+
+        Route::put('comments/status/{id}', [CommentController::class, 'update'])
+            ->name('comments.status');
+    });
 });
 
 Route::middleware('auth')->group(function () {

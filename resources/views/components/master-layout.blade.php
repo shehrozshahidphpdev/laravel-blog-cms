@@ -92,16 +92,21 @@
     <div class="bg-black border-b-2 border-red-600">
     <div class="max-w-7xl mx-auto px-6 flex items-center overflow-x-auto gap-0 scrollbar-hide">
             <a href="{{ route('all-posts') }}"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-red-500 border-b-2 border-red-500 pr-4 py-3 whitespace-nowrap">All</a>
+                class="font-[family-name:var(--font-ui)] text-xs  text-red-500 border-b-2 border-red-500 font-medium uppercase tracking-widest pr-4 py-3 whitespace-nowrap">All</a>
             @foreach ($categories as $category)
                 <a href="{{ route('all-posts', $category->slug) }}"
-                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest text-white/50 border-b-2 border-transparent pr-4 py-3 whitespace-nowrap hover:text-white transition-all">{{ $category->name }}</a>
+                class="font-[family-name:var(--font-ui)] text-xs font-medium uppercase tracking-widest 
+                {{ request()->route('category') == $category->slug 
+                        ? 'text-red-500 border-b-2 border-red-500' 
+                        : 'text-white/50 border-b-2 border-transparent' }}
+                pr-4 py-3 whitespace-nowrap hover:text-white transition-all">
+                {{ $category->name }}
+                </a>
             @endforeach
         </div>
     </div>
-
+    {{-- main layour goes here  --}}
     {{ $slot }}
-
 
     <!-- ░░ FOOTER ░░ -->
     <footer class="bg-black text-white mt-6">

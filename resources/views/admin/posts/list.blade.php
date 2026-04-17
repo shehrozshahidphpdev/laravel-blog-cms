@@ -49,7 +49,7 @@
               </td>
               <td class="px-4 py-3 text-gray-500">{{ $post->user->name }}</td>
               <td class="px-4 py-3 text-gray-700">{{ $post->category->name }}</td>
-              <td class="px-4 py-3 text-gray-700">{{ $post->title }}</td>
+              <td class="px-4 py-3 text-gray-700">{{ Str::limit($post->title, 20, '...') }}</td>
               <td class="px-4 py-3 text-gray-700">{{ Str::limit($post->content, 20, '...') }}</td>
               <td class="px-4 py-3 text-gray-700">
                 @if($post->status === 'active')

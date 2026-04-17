@@ -15,7 +15,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Cache::remember('tags', 3600, function () {
-            return Tag::paginate(10);
+            return Tag::orderBy('id', 'desc')->paginate(10);
         });
         return view('admin.tags.list', compact('tags'));
     }
@@ -35,7 +35,7 @@ class TagController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:tags,name',
         ]);
 
         Tag::create([

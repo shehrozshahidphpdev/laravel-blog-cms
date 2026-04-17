@@ -67,9 +67,10 @@
           @endforelse
         </tbody>
       </table>
-      <div class="paginaiton">
-        {{ $tags->links() }}
-      </div>
+
+    </div>
+    <div class="paginaiton mt-5">
+      {{ $tags->links() }}
     </div>
 
   </div>

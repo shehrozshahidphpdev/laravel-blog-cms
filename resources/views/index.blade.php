@@ -81,7 +81,7 @@
 
                         </div>
                         <a href="{{ route('read-post', $post->slug) }}"
-                            class="font-[family-name:var(--font-display)] text-lg font-bold leading-snug text-black hover:text-red-600 transition-colors mb-2">Why
+                            class="font-[family-name:var(--font-display)] text-lg font-bold leading-snug text-black hover:text-red-600 transition-colors mb-2">
                             {{ $post->title }}</a>
                         <p class="font-[family-name:var(--font-body)] text-sm leading-relaxed text-stone-500 flex-1">
                             {{ Str::limit($post->content, 100, '...') }}

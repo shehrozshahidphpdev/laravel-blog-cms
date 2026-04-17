@@ -20,18 +20,23 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        // dd(Cache::get('posts_editor_10'));
+        Cache::flush();
         $isAdmin = Auth::user()->role === 'admin';
-        $cacheKey = 'posts_' . ($isAdmin ? 'admin' : 'editor') . '_' . Auth::id();
-        $posts =  Cache::remember($cacheKey, 3600, function () use ($isAdmin, $request) {
+        $page = $request->get('page', 1);
+        $cacheKey = 'posts_' . ($isAdmin ? 'admin' : 'editor') . '_' . Auth::id() . '_page_' . $page;
+        $posts = Cache::remember($cacheKey, 3600, function () use ($isAdmin) {
             if ($isAdmin) {
                 return Post::with(['tags', 'category', 'user'])
-                    ->orderByDesc('id')->paginate(10);
+                    ->orderByDesc('id')
+                    ->paginate(10);
             }
+
             return Post::with(['tags', 'category', 'user'])
                 ->where('author_id', Auth::id())
+                ->orderByDesc('id')
                 ->paginate(10);
         });
+
         return view('admin.posts.list', compact('posts'));
     }
 

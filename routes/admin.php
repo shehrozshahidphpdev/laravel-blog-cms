@@ -17,8 +17,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // posts route
     Route::resource('posts', (PostController::class));
   });
-
-
   // admin routes only 
   // accounts routes
   Route::middleware('IsAdmin')->group(function () {
