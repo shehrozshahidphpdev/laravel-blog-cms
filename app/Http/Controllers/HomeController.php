@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use PhpParser\Node\Expr\PostDec;
 
 class HomeController extends Controller
@@ -30,7 +31,6 @@ class HomeController extends Controller
         }
         if ($request->has('search') && $request->search !== '') {
             $search = $request->input('search');
-
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'LIKE', '%' . $search . '%')
                     ->orWhereHas('category', function ($q2) use ($search) {
@@ -38,23 +38,24 @@ class HomeController extends Controller
                     });
             });
         };
-
-        $posts = $query->paginate(10);
+        $posts = $query->paginate(5);
         return view('posts', compact('posts'));
     }
 
     public function readPost(string $slug)
     {
-        $post = Post::with([
+        $user = Auth::user();
+
+        $post =  Post::with([
             'category',
             'tags',
             'user',
-            'comments' => function ($q) {
-                $q->where(function ($query) {
+            'comments' => function ($q) use ($user) {
+                $q->where(function ($query) use ($user) {
                     $query->where('status', 'approved')
-                        ->orWhere(function ($q2) {
+                        ->orWhere(function ($q2) use ($user) {
                             $q2->where('status', 'pending')
-                                ->where('user_id', Auth::user()->id);
+                                ->where('user_id', $user->id);
                         });
                 });
             },
@@ -63,7 +64,6 @@ class HomeController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
         // return $post;
-
         return view('show-post', compact('post'));
     }
 }

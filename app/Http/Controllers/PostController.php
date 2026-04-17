@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Services\MyHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -19,12 +20,18 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $posts = Post::with(['tags', 'category', 'user'])
-            ->where('author_id', Auth::user()->id)
-            ->paginate(10);
-        if ($request->user()->role == 'admin') {
-            $posts = Post::orderByDesc('id')->paginate(10);
-        }
+        // dd(Cache::get('posts_editor_10'));
+        $isAdmin = Auth::user()->role === 'admin';
+        $cacheKey = 'posts_' . ($isAdmin ? 'admin' : 'editor') . '_' . Auth::id();
+        $posts =  Cache::remember($cacheKey, 3600, function () use ($isAdmin, $request) {
+            if ($isAdmin) {
+                return Post::with(['tags', 'category', 'user'])
+                    ->orderByDesc('id')->paginate(10);
+            }
+            return Post::with(['tags', 'category', 'user'])
+                ->where('author_id', Auth::id())
+                ->paginate(10);
+        });
         return view('admin.posts.list', compact('posts'));
     }
 
@@ -83,7 +90,7 @@ class PostController extends Controller
             $post = Post::create($data);
             $post->tags()->sync($tagsIds);
             DB::commit();
-
+            Cache::flush();
             return to_route('posts.index')->with('success', "Post Created Successfully!");
         } catch (\Exception $e) {
             DB::rollBack();
@@ -160,7 +167,7 @@ class PostController extends Controller
             $post->update($data);
             $post->tags()->sync($tagsIds);
             DB::commit();
-
+            Cache::flush();
             return to_route('posts.index')->with('success', "Post Updated Successfully!");
         } catch (\Exception $e) {
             DB::rollBack();
@@ -185,7 +192,7 @@ class PostController extends Controller
         MyHelper::removeFile($filePath);
         $post->tags()->sync([]);
         $post->delete();
-
+        Cache::flush();
         return redirect()->back()->with('success', "Post Deleted Successfully");
     }
 }

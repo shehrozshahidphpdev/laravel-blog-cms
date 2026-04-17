@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use PHPUnit\TextUI\XmlConfiguration\FailedSchemaDetectionResult;
 
 class PostController extends Controller
 {
@@ -97,6 +96,7 @@ class PostController extends Controller
     // return response()->json([
     //   'qqdfwef' => "wdqwd",
     // ]);
+    $user = Auth::user();
 
     $post = Post::findOrFail($id);
 
@@ -193,6 +193,13 @@ class PostController extends Controller
     ])
       ->where('slug', $slug)
       ->firstOrFail();
+
+    if (! $post) {
+      return response()->json([
+        'success' => false,
+        'message' => "Post not found successfully!",
+      ], 404);
+    }
     return response()->json([
       'success' => true,
       'message' => "Post Found successfully!",
@@ -223,11 +230,20 @@ class PostController extends Controller
     $filePath = $post->image;
     MyHelper::removeFile($filePath);
     $post->tags()->sync([]);
-    $post->delete();
-    return response()->json([
-      'success' => true,
-      'message' => "Post Deleted Successfully",
-      'post_id' => $post->id
-    ]);
+
+    try {
+      $post->delete();
+      return response()->json([
+        'success' => true,
+        'message' => "Post Deleted Successfully",
+        'post_id' => $post->id
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => "Post not deleted successfully",
+        'error' => $e->getMessage()
+      ]);
+    }
   }
 }

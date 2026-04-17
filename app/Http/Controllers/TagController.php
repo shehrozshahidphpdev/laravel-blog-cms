@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class TagController extends Controller
@@ -13,7 +14,9 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(10);
+        $tags = Cache::remember('tags', 3600, function () {
+            return Tag::paginate(10);
+        });
         return view('admin.tags.list', compact('tags'));
     }
 
@@ -39,7 +42,7 @@ class TagController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name)
         ]);
-
+        Cache::forget('tags');
         return to_route('tags.index')->with('success', 'Tag created Successfully');
     }
 
@@ -74,6 +77,7 @@ class TagController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name)
         ]);
+        Cache::forget('tags');
 
         return to_route('tags.index')->with('success', 'Tag updated Successfully');
     }
@@ -85,6 +89,7 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
         $tag->delete();
+        Cache::forget('tags');
         return to_route('tags.index')->with('success', 'Tag Deleted Succesfully');
     }
 }

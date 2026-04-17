@@ -21,12 +21,15 @@ class DashBoardController extends Controller
 
     public function comments()
     {
-        $userId = Auth::user()->id;
-        $comments = Comment::with('user')->whereHas('post', function ($q) {
-            $q->where('author_id', Auth::user()->id);
+        $user = Auth::user();
+        if (!$user) {
+            abort(403, 'unauthorized');
+        }
+        $comments = Comment::with('user')->whereHas('post', function ($q) use ($user) {
+            $q->where('author_id', $user->id);
         })->paginate(15);
 
-        if (Auth::user()->role == 'admin') {
+        if ($user->role == 'admin') {
             $comments = Comment::with('user')
                 ->orderBy('id', 'desc')->paginate(15);
         }

@@ -123,7 +123,9 @@
               <p class="text-red-500">{{ $message }}</p>
             @enderror
             @error('comment')
-              {{ $message }}
+              <p class="text-red-500">
+                {{ $message }}
+              </p>
             @enderror
             @if(session('success'))
               <p class="text-green-500">{{ session('success') }}</p>
@@ -170,8 +172,8 @@
                     @method('DELETE')
                     <button type="submit"
                       class="cursor-pointer ml-auto font-[family-name:var(--font-ui)] text-[10px]
-                                                                                                                                                                                         text-stone-400 hover:text-red-600 tracking-widest
-                                                                                                                                                   uppercase transition-colors">
+                                                                                                                                                                                                     text-stone-400 hover:text-red-600 tracking-widest
+                                                                                                                                                               uppercase transition-colors">
                       Delete
                     </button>
                   </form>
